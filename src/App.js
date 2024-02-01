@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import EventList from "./components/EventList";
+import CitySearch from "./components/CitySearch";
+import NumberOfEvents from "./components/NumberOfEvents";
+import { extractLocations, getEvents } from "./api";
+import { useEffect, useState } from "react";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
+  const [events, setEvents] = useState("");
+  const [locations, setLocations] = useState("");
+
+  useEffect(() => {
+    async function fetchEvents() {
+      const allEvents = await getEvents();
+      const allLocations = extractLocations(allEvents);
+      setEvents(allEvents);
+      setLocations(allLocations);
+      // console.log(events);
+    }
+
+    fetchEvents();
+    // console.log(events);
+  }, [events]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div
+        className="d-flex justify-content-md-center mx-auto mt-3 mb-4"
+        id="top-bar"
+      >
+        <div>
+          <span>Search for a city</span>
+          <CitySearch allLocations={locations} />
+        </div>
+        <div>
+          <span>Number of events</span>
+          <NumberOfEvents />
+        </div>
+      </div>
+
+      {events.length === 0 ? (
+        <p>Events list is empty.</p>
+      ) : (
+        <EventList events={events} />
+      )}
     </div>
   );
 }
