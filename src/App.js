@@ -3,25 +3,33 @@ import EventList from "./components/EventList";
 import CitySearch from "./components/CitySearch";
 import NumberOfEvents from "./components/NumberOfEvents";
 import { extractLocations, getEvents } from "./api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [events, setEvents] = useState("");
   const [locations, setLocations] = useState("");
+  const [currentNumberOfEvents, setCurrentNumberOfEvents] = useState(32);
+  const [currentCity, setCurrentCity] = useState("See all cities");
+
+  const fetchEvents = useCallback(async () => {
+    const allEvents = await getEvents();
+    const allLocations = extractLocations(allEvents);
+    const filteredEvents =
+      currentCity === "See all cities"
+        ? allEvents
+        : allEvents.filter((event) => {
+            return event.location === currentCity;
+          });
+    setLocations(allLocations);
+    setEvents(filteredEvents.slice(0, currentNumberOfEvents));
+
+    // console.log(events);
+  }, [currentCity, currentNumberOfEvents]);
 
   useEffect(() => {
-    async function fetchEvents() {
-      const allEvents = await getEvents();
-      const allLocations = extractLocations(allEvents);
-      setEvents(allEvents);
-      setLocations(allLocations);
-      // console.log(events);
-    }
-
     fetchEvents();
-    // console.log(events);
-  }, [events]);
+  }, [fetchEvents]);
 
   return (
     <div className="App">
@@ -31,7 +39,10 @@ function App() {
       >
         <div>
           <span>Search for a city</span>
-          <CitySearch allLocations={locations} />
+          <CitySearch
+            allLocations={locations}
+            setCurrentCity={setCurrentCity}
+          />
         </div>
         <div>
           <span>Number of events</span>

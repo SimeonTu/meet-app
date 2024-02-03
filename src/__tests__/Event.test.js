@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { getEvents } from "../api";
-import Event from "../components/Event";
 import App from "../App";
 
 describe("<Event /> component", () => {
