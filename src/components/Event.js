@@ -24,7 +24,7 @@ const Event = ({ event }) => {
         <h3 className="text-center">{event.summary}</h3>
         <p className="mb-0 mt-3">{new Date(event.created).toString()}</p>
         <p className="mb-2 d-flex justify-content-start">
-          {event.summary} | <span className="ms-1">{event.location}</span>
+        <span className="ms-1">{event.location}</span>
         </p>
         {showDetails ? <div data-testid="details">test</div> : null}
       </Col>

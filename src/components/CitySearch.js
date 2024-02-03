@@ -8,7 +8,6 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    console.log(allLocations);
     setSuggestions(allLocations);
   }, [allLocations]); //potential infinite loop?? if yes, change back to JSON.stringify(allLocations)
 
@@ -39,7 +38,7 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
   };
 
   return (
-    <div id="city-search" data-testid="city-search" className="me-3">
+    <div id="city-search" data-testid="city-search">
       <input
         type="text"
         className="city"

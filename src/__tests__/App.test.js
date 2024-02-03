@@ -7,6 +7,7 @@ import { getEvents } from "../api";
 
 describe("<App /> component", () => {
   test("renders list of events", async () => {
+
     render(<App />);
     expect(await screen.findByTestId("event-list")).toBeInTheDocument();
   });

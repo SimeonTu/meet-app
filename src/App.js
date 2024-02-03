@@ -9,7 +9,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [events, setEvents] = useState("");
   const [locations, setLocations] = useState("");
-  const [currentNumberOfEvents, setCurrentNumberOfEvents] = useState(32);
+  const [numberOfEvents, setNumberOfEvents] = useState(32);
   const [currentCity, setCurrentCity] = useState("See all cities");
 
   const fetchEvents = useCallback(async () => {
@@ -19,13 +19,13 @@ function App() {
       currentCity === "See all cities"
         ? allEvents
         : allEvents.filter((event) => {
-            return event.location === currentCity;
-          });
+          return event.location === currentCity;
+        });
     setLocations(allLocations);
-    setEvents(filteredEvents.slice(0, currentNumberOfEvents));
+    setEvents(filteredEvents.slice(0, numberOfEvents));
 
-    // console.log(events);
-  }, [currentCity, currentNumberOfEvents]);
+    console.log(numberOfEvents);
+  }, [currentCity, numberOfEvents]);
 
   useEffect(() => {
     fetchEvents();
@@ -33,6 +33,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>~MEET APP~</h1>
       <div
         className="d-flex justify-content-md-center mx-auto mt-3 mb-4"
         id="top-bar"
@@ -43,10 +44,9 @@ function App() {
             allLocations={locations}
             setCurrentCity={setCurrentCity}
           />
-        </div>
-        <div>
+
           <span>Number of events</span>
-          <NumberOfEvents />
+          <NumberOfEvents setNumberOfEvents={setNumberOfEvents} />
         </div>
       </div>
 
