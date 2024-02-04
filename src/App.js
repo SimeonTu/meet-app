@@ -11,21 +11,22 @@ function App() {
   const [locations, setLocations] = useState("");
   const [numberOfEvents, setNumberOfEvents] = useState(32);
   const [currentCity, setCurrentCity] = useState("See all cities");
+  const [filteredEvents, setFilteredEvents] = useState([])
 
   const fetchEvents = useCallback(async () => {
+    console.log("fetching...");
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
-    const filteredEvents =
-      currentCity === "See all cities"
-        ? allEvents
-        : allEvents.filter((event) => {
-          return event.location === currentCity;
-        });
+    setFilteredEvents(currentCity === "See all cities"
+      ? allEvents
+      : allEvents.filter((event) => {
+        return event.location === currentCity;
+      }));
     setLocations(allLocations);
-    setEvents(filteredEvents.slice(0, numberOfEvents));
+    setEvents(filteredEvents);
 
     console.log(numberOfEvents);
-  }, [currentCity, numberOfEvents]);
+  }, [currentCity, numberOfEvents, filteredEvents]);
 
   useEffect(() => {
     fetchEvents();
@@ -46,7 +47,7 @@ function App() {
           />
 
           <span>Number of events</span>
-          <NumberOfEvents setNumberOfEvents={setNumberOfEvents} />
+          <NumberOfEvents setNumberOfEvents={setNumberOfEvents} setEvents={setEvents} filteredEvents={filteredEvents} />
         </div>
       </div>
 

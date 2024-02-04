@@ -1,18 +1,19 @@
 // src/components/EventList.js
 import { useState } from "react";
 
-const NumberOfEvents = ({ setNumberOfEvents }) => {
+const NumberOfEvents = ({ setNumberOfEvents, setEvents, filteredEvents }) => {
   const [value, setValue] = useState(32);
 
   function handleChange(event) {
 
     setValue(event.target.value)
+    setEvents(filteredEvents.slice(0, event.target.value));
 
-    if (!event.target.value) {
-      setNumberOfEvents(32)
-    } else {
-      setNumberOfEvents(event.target.value)
-    }
+    // if (!event.target.value) {
+    //   setNumberOfEvents(32)
+    // } else {
+    //   setNumberOfEvents(event.target.value)
+    // }
   }
 
   return (
