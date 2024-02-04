@@ -26,7 +26,7 @@ function App() {
     setEvents(filteredEvents);
 
     console.log(numberOfEvents);
-  }, [currentCity, numberOfEvents, filteredEvents]);
+  }, [currentCity, numberOfEvents, `${filteredEvents}`]);
 
   useEffect(() => {
     fetchEvents();
