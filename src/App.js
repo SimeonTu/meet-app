@@ -23,9 +23,10 @@ function App() {
         return event.location === currentCity;
       }));
     setLocations(allLocations);
-    setEvents(filteredEvents);
+    setEvents(filteredEvents.slice(0, numberOfEvents));
 
     console.log(numberOfEvents);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCity, numberOfEvents, `${filteredEvents}`]);
 
   useEffect(() => {
