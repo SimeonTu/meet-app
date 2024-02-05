@@ -1,7 +1,7 @@
 // src/components/EventList.js
 import { useState } from "react";
 
-const NumberOfEvents = ({ setNumberOfEvents, setEvents, filteredEvents }) => {
+const NumberOfEvents = ({ setEvents, filteredEvents }) => {
   const [value, setValue] = useState(32);
 
   function handleChange(event) {

@@ -37,7 +37,7 @@ describe("<App /> integration", () => {
     await user.click(berlinSuggestionItem);
 
     const EventList = await screen.findByTestId("event-list");
-    const allRenderedEventItems = within(EventList).queryAllByRole("listitem");
+    const allRenderedEventItems = await within(EventList).findAllByRole("listitem");
 
     const allEvents = await getEvents();
     const berlinEvents = allEvents.filter(

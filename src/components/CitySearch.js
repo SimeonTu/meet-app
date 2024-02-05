@@ -30,7 +30,6 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
   };
 
   const handleItemClicked = (event) => {
-    event.preventDefault();
     const value = event.target.textContent;
     setQuery(value);
     setShowSuggestions(false); // to hide the list

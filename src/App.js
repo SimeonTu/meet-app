@@ -9,25 +9,22 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [events, setEvents] = useState("");
   const [locations, setLocations] = useState("");
-  const [numberOfEvents, setNumberOfEvents] = useState(32);
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [filteredEvents, setFilteredEvents] = useState([])
 
   const fetchEvents = useCallback(async () => {
-    console.log("fetching...");
+    // console.log("fetching...");
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
-    setFilteredEvents(currentCity === "See all cities"
+    const filteredEvents = currentCity === "See all cities"
       ? allEvents
-      : allEvents.filter((event) => {
-        return event.location === currentCity;
-      }));
+      : allEvents.filter((calenderEvent) => {
+        return calenderEvent.location === currentCity;
+      })
+    setFilteredEvents(filteredEvents);
     setLocations(allLocations);
-    setEvents(filteredEvents.slice(0, numberOfEvents));
-
-    console.log(numberOfEvents);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCity, numberOfEvents, `${filteredEvents}`]);
+    setEvents(filteredEvents.slice(0, 32));
+  }, [currentCity]);
 
   useEffect(() => {
     fetchEvents();
@@ -48,7 +45,7 @@ function App() {
           />
 
           <span>Number of events</span>
-          <NumberOfEvents setNumberOfEvents={setNumberOfEvents} setEvents={setEvents} filteredEvents={filteredEvents} />
+          <NumberOfEvents setEvents={setEvents} filteredEvents={filteredEvents} />
         </div>
       </div>
 

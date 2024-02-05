@@ -1,4 +1,4 @@
-import { screen, render, within } from "@testing-library/react";
+import { screen, render, within, cleanup } from "@testing-library/react";
 import CitySearch from "../components/CitySearch";
 import userEvent from "@testing-library/user-event";
 import { extractLocations, getEvents } from "../api";
@@ -26,6 +26,7 @@ describe("<CitySearch /> component", () => {
     const suggestionList = screen.queryByRole("list");
     expect(suggestionList).toBeInTheDocument();
     expect(suggestionList).toHaveClass("suggestions");
+
   });
 
   test("updates list of suggestions correctly when user types in city textbox", async () => {
@@ -41,10 +42,10 @@ describe("<CitySearch /> component", () => {
     // filter allLocations to locations matching "Berlin"
     const suggestions = allLocations
       ? allLocations.filter((location) => {
-          return (
-            location.toUpperCase().indexOf(cityTextBox.value.toUpperCase()) > -1
-          );
-        })
+        return (
+          location.toUpperCase().indexOf(cityTextBox.value.toUpperCase()) > -1
+        );
+      })
       : [];
 
     // get all <li> elements inside the suggestion list
@@ -60,7 +61,7 @@ describe("<CitySearch /> component", () => {
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
     render(
-      <CitySearch allLocations={allLocations} setCurrentCity={() => {}} />
+      <CitySearch allLocations={allLocations} setCurrentCity={() => { }} />
     );
 
     const cityTextBox = screen.queryByRole("textbox");
@@ -73,6 +74,24 @@ describe("<CitySearch /> component", () => {
 
     expect(cityTextBox).toHaveValue(BerlinGermanySuggestion.textContent);
   });
+
+  test("suggestion box should show all available cities after user leaves field empty (i.e. typing something and then deleting it)", async () => {
+
+    const user = userEvent.setup();
+    render(<App />)
+
+    const CitySearch = screen.getByTestId("city-search");
+    const cityTextBox = within(CitySearch).queryByRole("textbox");
+
+    await user.type(cityTextBox, "test{backspace}{backspace}{backspace}{backspace}");
+
+    const allEvents = await getEvents();
+    const allLocations = extractLocations(allEvents);
+
+    const suggestionListItems = within(CitySearch).queryAllByRole("listitem");
+    expect(suggestionListItems.length).toBe(allLocations.length + 1);
+
+  })
 });
 
 describe("<CitySearch /> integration", () => {
