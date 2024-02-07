@@ -8,28 +8,46 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [events, setEvents] = useState("");
+  const [allEvents, setAllEvents] = useState("")
   const [locations, setLocations] = useState("");
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [filteredEvents, setFilteredEvents] = useState([])
   const [numberOfEvents, setNumberOfEvents] = useState(32)
 
   const fetchEvents = useCallback(async () => {
+
     // console.log("fetching...");
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
-    const filteredEvents = currentCity === "See all cities"
-      ? allEvents
-      : allEvents.filter((calenderEvent) => {
-        return calenderEvent.location === currentCity;
-      })
-    setFilteredEvents(filteredEvents);
-    setLocations(allLocations);
-    setEvents(filteredEvents.slice(0, numberOfEvents));
-  }, [currentCity, numberOfEvents]);
+    setEvents(allEvents)
+    setAllEvents(allEvents)
+    setLocations(allLocations)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [`${events}`]);
 
   useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+
+    if (!events) {
+      fetchEvents();
+    }
+
+    if (events) {
+
+      const filteredEvents = currentCity === "See all cities"
+        ? allEvents
+        : allEvents.filter((calenderEvent) => {
+          return calenderEvent.location === currentCity;
+        })
+      setFilteredEvents(filteredEvents);
+      setEvents(filteredEvents.slice(0, numberOfEvents));
+
+    }
+
+    console.log("number of events value:", numberOfEvents, "\nevents object length:", events.length);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchEvents, numberOfEvents, currentCity, `${events}`]);
 
   return (
     <div className="App">
