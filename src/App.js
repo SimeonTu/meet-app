@@ -11,6 +11,7 @@ function App() {
   const [locations, setLocations] = useState("");
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [filteredEvents, setFilteredEvents] = useState([])
+  const [numberOfEvents, setNumberOfEvents] = useState(32)
 
   const fetchEvents = useCallback(async () => {
     // console.log("fetching...");
@@ -23,8 +24,8 @@ function App() {
       })
     setFilteredEvents(filteredEvents);
     setLocations(allLocations);
-    setEvents(filteredEvents.slice(0, 32));
-  }, [currentCity]);
+    setEvents(filteredEvents.slice(0, numberOfEvents));
+  }, [currentCity, numberOfEvents]);
 
   useEffect(() => {
     fetchEvents();
@@ -45,7 +46,7 @@ function App() {
           />
 
           <span>Number of events</span>
-          <NumberOfEvents setEvents={setEvents} filteredEvents={filteredEvents} />
+          <NumberOfEvents setEvents={setEvents} filteredEvents={filteredEvents} setNumberOfEvents={setNumberOfEvents} />
         </div>
       </div>
 
