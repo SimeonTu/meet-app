@@ -126,3 +126,12 @@ input[type="number"] {
   /* outline: none; */
   /* cursor: pointer; */
 }
+
+.alerts-container {
+
+}
+
+.alerts-container p {
+  margin: 0;
+  padding: 10px;
+}

@@ -22,7 +22,7 @@ defineFeature(feature, test => {
 
             // const EventList = await screen.findByTestId("event-list")
             const eventListItems = within(await screen.findByTestId("event-list")).queryAllByRole("listitem")
-
+            console.log(eventListItems.length);
             expect(eventListItems.length).toBe(32)
         });
     });

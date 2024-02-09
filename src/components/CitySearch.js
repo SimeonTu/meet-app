@@ -2,23 +2,37 @@
 
 import { useState, useEffect } from "react";
 
-const CitySearch = ({ allLocations, setCurrentCity }) => {
+const CitySearch = ({ allLocations, setCurrentCity, setInfoText, setErrorText }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    setSuggestions(allLocations);
-  }, [allLocations]); //potential infinite loop?? if yes, change back to JSON.stringify(allLocations)
+    if (!query) setSuggestions(allLocations);
+  }, [query, allLocations])
 
   const handleInputChanged = (event) => {
     const value = event.target.value;
+    let filteredLocations = "";
+    let infoText;
+    let errorText;
+
+    setQuery(value);
+
+    console.log(typeof value, value);
+
+    if (value && /\d/.test(value) === true) { //regex test to check if input value contains a digit
+      errorText = "Please only use letters and not numbers when searching for a city"
+    } else {
+      errorText = ""
+    }
+    setErrorText(errorText)
 
     if (value) {
-      const filteredLocations = allLocations
+      filteredLocations = allLocations
         ? allLocations.filter((location) => {
-            return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
-          })
+          return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
+        })
         : [];
       setShowSuggestions(true);
       setSuggestions(filteredLocations);
@@ -26,7 +40,12 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
       setSuggestions(allLocations);
     }
 
-    setQuery(value);
+    if (value && !filteredLocations.length) {
+      infoText = "We can not find the city you are looking for. Please try another city or choose \"See all cities\""
+    } else {
+      infoText = ""
+    }
+    setInfoText(infoText);
   };
 
   const handleItemClicked = (event) => {
@@ -34,6 +53,8 @@ const CitySearch = ({ allLocations, setCurrentCity }) => {
     setQuery(value);
     setShowSuggestions(false); // to hide the list
     setCurrentCity(value);
+    setInfoText("")
+    setErrorText("")
   };
 
   return (
