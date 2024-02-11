@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const CitySearch = ({ allLocations, setCurrentCity, setInfoText, setErrorText }) => {
+const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErrorText }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -65,8 +65,9 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoText, setErrorText })
         placeholder="Ex: Berlin, Germany"
         value={query}
         onFocus={() => setShowSuggestions(true)}
-        // onBlur={() => setShowSuggestions(false)}
+        onBlur={() => setShowSuggestions(false)}
         onChange={handleInputChanged}
+        disabled={!events ? true : false}
       />
       {showSuggestions ? (
         <ul className="suggestions">

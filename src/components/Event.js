@@ -27,8 +27,6 @@ const Event = ({ event }) => {
     }
   }
 
-  console.log(event);
-
   return (
     <Col md={6} xl={4} className="p-0">
 

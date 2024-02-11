@@ -1,6 +1,8 @@
 // src/api.js
 
 import mockData from "./mock-data";
+import NProgress from 'nprogress'
+import './page-loader.css'
 
 /**
  *
@@ -10,6 +12,39 @@ import mockData from "./mock-data";
  * It will also remove all duplicates by creating another new array using the spread operator and spreading a Set.
  * The Set will remove all duplicates from the array.
  */
+
+/**
+ This function will fetch the list of all events
+ */
+export const getEvents = async () => {
+  NProgress.start();
+
+  if (window.location.href.startsWith("http://localhost")) {
+    NProgress.done();
+    return mockData;
+  }
+
+  if (!navigator.onLine) {
+    const events = localStorage.getItem("lastEvents");
+    NProgress.done();
+    return events ? JSON.parse(events) : [];
+  }
+
+  const token = await getAccessToken();
+
+  if (token) {
+    removeQuery();
+    const url = `https://0hsswkzv0c.execute-api.eu-west-2.amazonaws.com/dev/api/get-events/${token}`;
+    const response = await fetch(url);
+    const result = await response.json();
+    if (result) {
+      NProgress.done();
+      localStorage.setItem("lastEvents", JSON.stringify(result.events));
+      return result.events;
+    } else return null;
+  }
+};
+
 export const extractLocations = (events) => {
   const extractedLocations = events.map((event) => event.location);
   const locations = [...new Set(extractedLocations)];
@@ -28,28 +63,6 @@ const removeQuery = () => {
   } else {
     newurl = window.location.protocol + "//" + window.location.host;
     window.history.pushState("", "", newurl);
-  }
-};
-
-/**
- *
- * This function will fetch the list of all events
- */
-export const getEvents = async () => {
-  if (window.location.href.startsWith("http://localhost")) {
-    return mockData;
-  }
-
-  const token = await getAccessToken();
-
-  if (token) {
-    removeQuery();
-    const url = `https://0hsswkzv0c.execute-api.eu-west-2.amazonaws.com/dev/api/get-events/${token}`;
-    const response = await fetch(url);
-    const result = await response.json();
-    if (result) {
-      return result.events;
-    } else return null;
   }
 };
 

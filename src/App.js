@@ -6,6 +6,8 @@ import NumberOfEvents from "./components/NumberOfEvents";
 import { extractLocations, getEvents } from "./api";
 import { useCallback, useEffect, useState } from "react";
 import { ErrorAlert, InfoAlert } from './components/Alert';
+// import NProgress from 'nprogress';
+// import './page-loader.css'
 
 function App() {
   const [events, setEvents] = useState("");
@@ -16,7 +18,6 @@ function App() {
   const [numberOfEvents, setNumberOfEvents] = useState(32)
   const [infoText, setInfoText] = useState("");
   const [errorText, setErrorText] = useState("");
-
 
   const setEventValues = useCallback(() => {
     const filteredEvents = currentCity === "See all cities"
@@ -41,7 +42,10 @@ function App() {
 
   }, [setEventValues]);
 
+
   useEffect(() => {
+
+    console.log("online:",navigator.onLine);
 
     if (!events) {
       fetchEvents();
@@ -50,7 +54,7 @@ function App() {
       setEventValues();
     }
 
-    console.log("number of events value:", numberOfEvents, "\nevents object length:", events.length);
+    // console.log("number of events value:", numberOfEvents, "\nevents object length:", events.length);
     // console.log("infotext value:",infoText);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,6 +64,8 @@ function App() {
   return (
     <div className="App">
       <h1 style={{ fontFamily: "'Kanit', sans-serif" }} className="mt-3">MEET APP</h1>
+
+      <div>{!navigator.onLine ? "You're offline." : null}</div>
 
       <div className="alerts-container">
         {errorText ? <ErrorAlert text={errorText} /> : infoText ? <InfoAlert text={infoText} /> : null}
@@ -72,6 +78,7 @@ function App() {
         <div id="city-search__wrapper" className="me-md-3 mb-2 mb-md-0">
           <span>Search for a city</span>
           <CitySearch
+            events={events}
             allLocations={locations}
             setCurrentCity={setCurrentCity}
             setInfoText={setInfoText}
