@@ -5,7 +5,7 @@ import CitySearch from "./components/CitySearch";
 import NumberOfEvents from "./components/NumberOfEvents";
 import { extractLocations, getEvents } from "./api";
 import { useCallback, useEffect, useState } from "react";
-import { ErrorAlert, InfoAlert } from './components/Alert';
+import { ErrorAlert, InfoAlert, LocationAlert, OfflineAlert } from './components/Alert';
 // import NProgress from 'nprogress';
 // import './page-loader.css'
 
@@ -16,8 +16,15 @@ function App() {
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [filteredEvents, setFilteredEvents] = useState([])
   const [numberOfEvents, setNumberOfEvents] = useState(32)
+
   const [infoText, setInfoText] = useState("");
   const [errorText, setErrorText] = useState("");
+  const [offlineText, setOfflineText] = useState("");
+  const [locationAlert, setShowLocationAlert] = useState("");
+
+  const [userCountry, setUserCountry] = useState("");
+  const [userCountryFormatted, setUserCountryFormatted] = useState("");
+  const [searchForUserCountry, setSearchForUserCountry] = useState("");
 
   const setEventValues = useCallback(() => {
     const filteredEvents = currentCity === "See all cities"
@@ -45,7 +52,43 @@ function App() {
 
   useEffect(() => {
 
-    console.log("online:",navigator.onLine);
+    if (!userCountry) {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function (location) {
+          console.log("location:", location);
+          let latitude = location.coords.latitude.toString()
+          let longitude = location.coords.longitude.toString()
+          fetch(`http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=simeont`)
+            .then(response => response.json())
+            .then(data => {
+              let country = data.countryName
+              if (country === "United Kingdom") {
+                country = "UK"
+              }
+              console.log(data)
+              localStorage.setItem("userCountry", country)
+
+              let filteredLocations = locations.filter(item => item.includes(country))
+              console.log("filtered locations", filteredLocations);
+              console.log("includes country:", !!filteredLocations);
+
+              setUserCountry(country)
+              setUserCountryFormatted(filteredLocations[0])
+              setShowLocationAlert(true)
+            })
+        });
+      }
+    }
+
+    console.log(userCountry);
+    console.log("current city value:", currentCity);
+
+    console.log("online:", navigator.onLine);
+    if (navigator.onLine) {
+      setOfflineText("")
+    } else {
+      setOfflineText("You're currently offline and viewing a cached version of the website")
+    }
 
     if (!events) {
       fetchEvents();
@@ -58,16 +101,18 @@ function App() {
     // console.log("infotext value:",infoText);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchEvents, numberOfEvents, currentCity, `${events}`, `${allEvents}`, infoText, setEventValues]);
+  }, [fetchEvents, numberOfEvents, currentCity, `${events}`, `${allEvents}`, infoText, offlineText, setEventValues, userCountry]);
 
 
   return (
     <div className="App">
       <h1 style={{ fontFamily: "'Kanit', sans-serif" }} className="mt-3">MEET APP</h1>
 
-      <div>{!navigator.onLine ? "You're offline." : null}</div>
-
       <div className="alerts-container">
+        {locationAlert ? (
+          <LocationAlert setShowLocationAlert={setShowLocationAlert} userCountry={userCountry} setSearchForUserCountry={setSearchForUserCountry} />
+        ) : null}
+        {offlineText ? <OfflineAlert className="mb-2" text={offlineText} /> : null}
         {errorText ? <ErrorAlert text={errorText} /> : infoText ? <InfoAlert text={infoText} /> : null}
       </div>
 
@@ -83,6 +128,9 @@ function App() {
             setCurrentCity={setCurrentCity}
             setInfoText={setInfoText}
             setErrorText={setErrorText}
+            userCountryFormatted={userCountryFormatted}
+            searchForUserCountry={searchForUserCountry}
+            setSearchForUserCountry={setSearchForUserCountry}
           />
         </div>
 

@@ -2,14 +2,27 @@
 
 import { useState, useEffect } from "react";
 
-const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErrorText }) => {
+const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErrorText, userCountry, userCountryFormatted, searchForUserCountry, setSearchForUserCountry }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     if (!query) setSuggestions(allLocations);
-  }, [query, allLocations])
+
+    console.log("user country within citysearch:", userCountryFormatted);
+
+    if (searchForUserCountry) {
+      if (userCountryFormatted === "") {
+        setQuery(userCountry)
+        return
+      }
+      setQuery(userCountryFormatted)
+      setCurrentCity(userCountryFormatted)
+      setSearchForUserCountry(false)
+    }
+
+  }, [query, allLocations, userCountry, userCountryFormatted, searchForUserCountry, setCurrentCity, setSearchForUserCountry])
 
   const handleInputChanged = (event) => {
     const value = event.target.value;

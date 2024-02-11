@@ -34,7 +34,7 @@ const NumberOfEvents = ({ setEvents, filteredEvents, setNumberOfEvents }) => {
         <option value="32"></option>
       </datalist>
 
-      <label for="events" className="ms-2" style={{ width: "20px" }}>
+      <label htmlFor="events" className="ms-2" style={{ width: "20px" }}>
         <span>
           {value}
         </span>

@@ -177,7 +177,21 @@ input[type="number"] {
 .alerts-container {
   width: 95%;
   margin: 0 auto;
+
+  .alerts-button {
+    box-shadow: 0 0 8px -4px rgba(0, 0, 0, 0.75);
+    border-radius: 7px;
+    border: unset;
+    background-color: white;
+    transition: background-color 0.25s ease;
+  }
+  .alerts-button:hover {
+    background-color: #EFD2D3;
+  }
+
 }
+
+
 
 @include media-breakpoint-up(sm) {
 
