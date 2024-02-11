@@ -13,8 +13,8 @@ const NumberOfEvents = ({ setEvents, filteredEvents, setNumberOfEvents }) => {
   }
 
   return (
-    <div className="d-flex justify-content-md-start" data-testid="number-of-events">
-      <input style={{ width: "100%", accentColor: "LightSeaGreen" }}
+    <div className="d-flex" data-testid="number-of-events">
+      <input style={{ accentColor: "#EFD2D3" }}
         type="range"
         id="events"
         name="events"

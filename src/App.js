@@ -1,11 +1,11 @@
-import "./App.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "./App.scss";
 import EventList from "./components/EventList";
 import CitySearch from "./components/CitySearch";
 import NumberOfEvents from "./components/NumberOfEvents";
 import { extractLocations, getEvents } from "./api";
 import { useCallback, useEffect, useState } from "react";
 import { ErrorAlert, InfoAlert } from './components/Alert';
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [events, setEvents] = useState("");
@@ -59,17 +59,17 @@ function App() {
 
   return (
     <div className="App">
-      <h1>~MEET APP~</h1>
+      <h1 style={{ fontFamily: "'Kanit', sans-serif" }} className="mt-3">MEET APP</h1>
 
       <div className="alerts-container">
         {errorText ? <ErrorAlert text={errorText} /> : infoText ? <InfoAlert text={infoText} /> : null}
       </div>
 
       <div
-        className="d-flex justify-content-md-center mx-auto mt-3 mb-4"
+        className="d-flex justify-content-center mx-auto mt-3 mb-4"
         id="top-bar"
       >
-        <div>
+        <div id="city-search__wrapper" className="me-md-3 mb-2 mb-md-0">
           <span>Search for a city</span>
           <CitySearch
             allLocations={locations}
@@ -77,7 +77,9 @@ function App() {
             setInfoText={setInfoText}
             setErrorText={setErrorText}
           />
+        </div>
 
+        <div id="number-of-events__wrapper">
           <span>Number of events</span>
           <NumberOfEvents
             setEvents={setEvents}
@@ -86,12 +88,14 @@ function App() {
         </div>
       </div>
 
-      {events.length === 0 ? (
-        <p>Events list is empty.</p>
-      ) : (
-        <EventList events={events} />
-      )}
-    </div>
+      {
+        events.length === 0 ? (
+          <p>Events list is empty.</p>
+        ) : (
+          <EventList events={events} />
+        )
+      }
+    </div >
   );
 }
 
