@@ -104,6 +104,8 @@ p {
 
 #city-search {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 input[type="text"],
@@ -121,9 +123,9 @@ input[type="number"] {
 
 .suggestions {
   width: 248px;
-  position: absolute;
-  left: 1px;
-  top: 38px;
+  // position: absolute;
+  // left: 1px;
+  // top: 38px;
   z-index: 2;
   align-self: center;
   margin: 0;
@@ -163,30 +165,48 @@ input[type="number"] {
   padding: 10px;
 }
 
-.btn, .btn:hover {
+.btn,
+.btn:hover {
   color: rgb(56, 56, 56);
+}
+
+#top-bar {
+  display: block;
 }
 
 @include media-breakpoint-up(md) {
 
   #top-bar {
+    display: flex;
+    justify-content: center;
     flex-direction: row;
   }
-  
+
+  #city-search {
+    display: block;
+    flex-direction: unset;
+  }
+
+  .suggestions {
+    position: absolute;
+    left: 1px;
+    top: 38px;
+  }
+
   #number-of-events__wrapper {
     position: relative;
     width: 250px;
     // display: flex;
     // flex-direction: column;
     // justify-content: center;
-  
+
     div {
       position: absolute;
       width: 250px;
       top: 75%;
       transform: translateY(-75%);
     }
-  
+
   }
 
 }

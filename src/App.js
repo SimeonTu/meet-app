@@ -46,7 +46,6 @@ function App() {
     if (!events) {
       fetchEvents();
     }
-
     if (events) {
       setEventValues();
     }
@@ -57,6 +56,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchEvents, numberOfEvents, currentCity, `${events}`, `${allEvents}`, infoText, setEventValues]);
 
+
   return (
     <div className="App">
       <h1 style={{ fontFamily: "'Kanit', sans-serif" }} className="mt-3">MEET APP</h1>
@@ -66,7 +66,7 @@ function App() {
       </div>
 
       <div
-        className="d-flex justify-content-center mx-auto mt-3 mb-4"
+        className="mx-auto mt-3 mb-4"
         id="top-bar"
       >
         <div id="city-search__wrapper" className="me-md-3 mb-2 mb-md-0">

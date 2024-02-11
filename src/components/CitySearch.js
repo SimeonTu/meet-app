@@ -65,7 +65,7 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoText, setErrorText })
         placeholder="Ex: Berlin, Germany"
         value={query}
         onFocus={() => setShowSuggestions(true)}
-        onBlur={() => setShowSuggestions(false)}
+        // onBlur={() => setShowSuggestions(false)}
         onChange={handleInputChanged}
       />
       {showSuggestions ? (
