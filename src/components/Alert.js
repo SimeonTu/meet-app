@@ -25,7 +25,7 @@ class Alert extends Component {
             fontSize: "0.95rem",
             margin: "0 auto",
             padding: "35px 20px 15px 20px",
-            width: "350px",
+            // width: "350px",
             boxShadow: "inset 0 0 15px -11px rgba(0, 0, 0, 0.75), 0 0 15px -11px rgba(0, 0, 0, 0.75)",
             position: "relative"
         }
