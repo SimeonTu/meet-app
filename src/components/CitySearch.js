@@ -13,8 +13,10 @@ const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErro
     console.log("user country within citysearch:", userCountryFormatted);
 
     if (searchForUserCountry) {
-      if (userCountryFormatted === "") {
+      if (userCountryFormatted === undefined) {
         setQuery(userCountry)
+        let infoText = "We can not find the city you are looking for. Please try another city or choose \"See all cities\""
+        setInfoText(infoText)
         return
       }
       setQuery(userCountryFormatted)
@@ -22,7 +24,7 @@ const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErro
       setSearchForUserCountry(false)
     }
 
-  }, [query, allLocations, userCountry, userCountryFormatted, searchForUserCountry, setCurrentCity, setSearchForUserCountry])
+  }, [query, allLocations, userCountry, userCountryFormatted, searchForUserCountry, setCurrentCity, setSearchForUserCountry, setInfoText])
 
   const handleInputChanged = (event) => {
     const value = event.target.value;

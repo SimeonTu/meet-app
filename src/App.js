@@ -10,6 +10,8 @@ import { ErrorAlert, InfoAlert, LocationAlert, OfflineAlert } from './components
 // import './page-loader.css'
 
 function App() {
+  // const [loading, setLoading] = useState("")
+
   const [events, setEvents] = useState("");
   const [allEvents, setAllEvents] = useState("")
   const [locations, setLocations] = useState("");
@@ -58,7 +60,7 @@ function App() {
           console.log("location:", location);
           let latitude = location.coords.latitude.toString()
           let longitude = location.coords.longitude.toString()
-          fetch(`http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=simeont`)
+          fetch(`https://secure.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=simeont`)
             .then(response => response.json())
             .then(data => {
               let country = data.countryName
@@ -95,6 +97,7 @@ function App() {
     }
     if (events) {
       setEventValues();
+      // setLoading(false) could be implemented later
     }
 
     // console.log("number of events value:", numberOfEvents, "\nevents object length:", events.length);
@@ -109,7 +112,7 @@ function App() {
       <h1 style={{ fontFamily: "'Kanit', sans-serif" }} className="mt-3">MEET APP</h1>
 
       <div className="alerts-container">
-        {locationAlert ? (
+        {locationAlert && events ? (
           <LocationAlert setShowLocationAlert={setShowLocationAlert} userCountry={userCountry} setSearchForUserCountry={setSearchForUserCountry} />
         ) : null}
         {offlineText ? <OfflineAlert className="mb-2" text={offlineText} /> : null}
@@ -128,6 +131,7 @@ function App() {
             setCurrentCity={setCurrentCity}
             setInfoText={setInfoText}
             setErrorText={setErrorText}
+            userCountry={userCountry}
             userCountryFormatted={userCountryFormatted}
             searchForUserCountry={searchForUserCountry}
             setSearchForUserCountry={setSearchForUserCountry}
