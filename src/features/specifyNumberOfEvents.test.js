@@ -1,6 +1,7 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
 import App from "../App";
 import { render, screen, within, fireEvent } from "@testing-library/react";
+import { getEvents } from '../api';
 
 const feature = loadFeature('./src/features/specifyNumberOfEvents.feature');
 
@@ -10,9 +11,13 @@ defineFeature(feature, test => {
 
         let EventList;
 
-        given('the user opens the app and has not specified the number of events', () => {
+        given('the user opens the app and has not specified the number of events', async () => {
 
             render(<App />)
+
+            let allEvents = await getEvents();
+            await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
+
             expect(screen.getByRole("slider")).toHaveValue("32");
 
         });

@@ -28,7 +28,7 @@ const Event = ({ event }) => {
   }
 
   return (
-    <Col md={6} xl={4} className="p-0">
+    <Col md={6} xl={4} className="p-0" role="listitem" key={event.summary}>
 
       <div style={{ backgroundColor: "#fcf8f8", borderRadius: "7px", boxShadow: "0 0 20px -15px rgba(0, 0, 0, 0.75)" }} className="m-2 p-3 text-center">
 
@@ -74,17 +74,6 @@ const Event = ({ event }) => {
             </div>
           </AnimateHeight>
 
-          {/* <AnimateHeight
-            duration={500}
-            height={showDetails ? 0 : "auto"}
-          >
-            <div
-              style={{ backgroundColor: "#EFD2D3", color: "black", borderRadius: "7px", transition: "opacity 0.5s ease" }}
-              className={showDetails ? "opacity-0" : "opacity-80"}>
-              {event.description.split(" ").slice(0, 10).join(" ") + "..."}
-            </div>
-          </AnimateHeight> */}
-
           <div id="time-and-date">
             <div id="start-time" className="mt-2">
               <AnimateHeight
@@ -93,12 +82,12 @@ const Event = ({ event }) => {
               >
                 <p className="m-0">Start time:</p>
               </AnimateHeight>
-              
+
               <p className="m-0">
                 <FontAwesomeIcon icon={icon({ name: "calendar-days", family: "classic", style: "solid" })} className="me-1" />
                 {startDate}
                 <FontAwesomeIcon icon={icon({ name: "clock", family: "classic", style: "solid" })} className="ms-3 me-1" />
-                {startTime}
+                <span data-testid="start-time" >{startTime}</span>
               </p>
             </div>
 

@@ -1,7 +1,7 @@
 // src/components/EventList.js
 import { useState } from "react";
 
-const NumberOfEvents = ({ setEvents, filteredEvents, setNumberOfEvents }) => {
+const NumberOfEvents = ({ setEvents, filteredEvents, setNumberOfEvents, events }) => {
   const [value, setValue] = useState(32);
 
   function handleChange(event) {
@@ -24,6 +24,7 @@ const NumberOfEvents = ({ setEvents, filteredEvents, setNumberOfEvents }) => {
         className="city"
         value={value}
         onChange={handleChange}
+        disabled={!events ? true : false}
       />
 
       <datalist id="values">

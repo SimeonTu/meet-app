@@ -34,39 +34,56 @@ class Alert extends Component {
 
     render() {
         return (
-            <div className="Alert mt-3">
-                <div style={this.getStyle()}>
-                    <FontAwesomeIcon
-                        size='lg'
-                        style={{ position: "absolute", top: "10px", left: "50%", transform: "translateX(-50%)", opacity: "0.95" }}
-                        icon={
-                            this.iconName === "circle-info"
-                                ?
-                                icon({ name: "circle-info", family: "classic", style: "solid" })
-                                :
-                                this.iconName === "location-dot"
-                                    ?
-                                    icon({ name: "location-dot", family: "classic", style: "solid" })
-                                    :
-                                    null
-                        }
-                    />
-                    {this.props.userCountry ? (
-                        <>
-                            <p className='p-0'>It looks like you're from <b>{this.props.userCountry}</b>.<br />Would you like to see events from this country?</p>
-                            <div>
-                                <button onClick={() => {
-                                    this.props.setSearchForUserCountry(true)
-                                    this.props.setShowLocationAlert(false)
-                                }
-                                } className='alerts-button mt-3 p-2 ps-3 pe-3'>Yes</button>
-                                <button onClick={() => this.props.setShowLocationAlert(false)} className='alerts-button mt-3 ms-3 p-2 ps-3 pe-3'>No</button>
+            <>
+                {
+                    this.props.userCountry ? (
+
+                        <div className="Alert mt-3">
+                            <div className="alerts-container--location p-sm-3 pe-sm-5">
+                                <FontAwesomeIcon
+                                    className='mt-3 mt-sm-0 me-sm-2'
+                                    size='lg'
+                                    style={{ opacity: "0.95" }}
+                                    icon={icon({ name: "location-dot", family: "classic", style: "solid" })}
+                                />
+                                <p className='mt-2 mt-sm-0 p-0'>Show events from <b>{this.props.userCountry}</b>?</p>
+                                <div>
+                                    <button
+                                        className='alerts-button mb-3 mb-sm-0 mt-2 mt-sm-0 ms-sm-3 p-2 ps-3 pe-3'
+                                        onClick={() => {
+                                            this.props.setSearchForUserCountry(true)
+                                            this.props.setShowLocationAlert(false)
+                                        }}
+                                    >
+                                        Yes
+                                    </button>
+                                    {/* <button onClick={() => this.props.setShowLocationAlert(false)} className='alerts-button mt-3 ms-3 p-2 ps-3 pe-3'>No</button> */}
+                                    <FontAwesomeIcon
+                                        onClick={() => this.props.setShowLocationAlert(false)}
+                                        className='me-2'
+                                        icon={icon({ name: "x", family: "classic", style: "solid" })}
+                                        style={{ position: "absolute", top: "15px", right: "10px", opacity: "0.7", cursor: "pointer" }}
+                                    />
+
+                                </div>
                             </div>
-                        </>
-                    ) : this.props.text}
-                </div>
-            </div>
-        );
+                        </div>
+
+                    ) : (
+                        <div className="Alert mt-3">
+                            <div style={this.getStyle()}>
+                                <FontAwesomeIcon
+                                    size='lg'
+                                    style={{ position: "absolute", top: "10px", left: "50%", transform: "translateX(-50%)", opacity: "0.95" }}
+                                    icon={icon({ name: "circle-info", family: "classic", style: "solid" })}
+                                />
+                                {this.props.text}
+                            </div>
+                        </div>
+                    )
+                }
+            </>
+        )
     }
 }
 
@@ -85,7 +102,7 @@ class ErrorAlert extends Alert {
         super(props);
         this.color = 'rgb(56, 56, 56)'; // warning
         // this.borderColor = 'darkred'
-        this.bgColor = 'white'; // 
+        this.bgColor = 'white'; //
         this.iconName = "circle-info"
     }
 }
@@ -95,7 +112,7 @@ class OfflineAlert extends Alert {
         super(props);
         this.color = 'rgb(56, 56, 56)'; // warning
         // this.borderColor = 'darkred'
-        this.bgColor = 'white'; // 
+        this.bgColor = 'white'; //
         this.iconName = "circle-info"
     }
 }
@@ -105,7 +122,7 @@ class LocationAlert extends Alert {
         super(props);
         this.color = 'rgb(56, 56, 56)'; // warning
         // this.borderColor = 'darkred'
-        this.bgColor = 'white'; // 
+        this.bgColor = 'white'; //
         this.iconName = "location-dot"
     }
 }

@@ -1,9 +1,10 @@
+const OpenAI = require("openai");
 const { google } = require("googleapis");
 const calendar = google.calendar("v3");
 const SCOPES = [
   "https://www.googleapis.com/auth/calendar.events.public.readonly",
 ];
-const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID } = process.env;
+const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID, OPENAI_API_KEY } = process.env;
 const redirect_uris = ["https://simeontu.github.io/meet-app/"];
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -11,6 +12,44 @@ const oAuth2Client = new google.auth.OAuth2(
   CLIENT_SECRET,
   redirect_uris[0]
 );
+
+module.exports.callChatGPT = async () => {
+
+  try {
+    const openai = new OpenAI({
+      apiKey: OPENAI_API_KEY // This is the default and can be omitted
+    });
+
+    let prompt = `Create a brand name for a web app which specilizes in showing events related to programming and web development, be creative about it, and don't only have the first word as "Code" or use "Dev" and "Connect" frequently. Limit the reply to one example.`
+
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-3.5-turbo',
+    });
+
+    console.log(chatCompletion);
+    console.log(chatCompletion.choices[0].message.content);
+
+    // return chatCompletion
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
+      body: JSON.stringify({
+        chatCompletion,
+      }),
+    };
+  } catch (error) {
+    // Handle error
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
+  };
+
+}
 
 module.exports.getAuthURL = async () => {
   /**

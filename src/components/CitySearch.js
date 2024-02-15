@@ -10,7 +10,7 @@ const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErro
   useEffect(() => {
     if (!query) setSuggestions(allLocations);
 
-    console.log("user country within citysearch:", userCountryFormatted);
+    // console.log("user country within citysearch:", userCountryFormatted);
 
     if (searchForUserCountry) {
       if (userCountryFormatted === undefined) {
@@ -34,7 +34,7 @@ const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErro
 
     setQuery(value);
 
-    console.log(typeof value, value);
+    // console.log(typeof value, value);
 
     if (value && /\d/.test(value) === true) { //regex test to check if input value contains a digit
       errorText = "Please only use letters and not numbers when searching for a city"
@@ -85,7 +85,7 @@ const CitySearch = ({ events, allLocations, setCurrentCity, setInfoText, setErro
         disabled={!events ? true : false}
       />
       {showSuggestions ? (
-        <ul className="suggestions">
+        <ul data-testid="suggestions-container" className="suggestions">
           {suggestions.map((suggestion) => {
             return (
               <li key={suggestion} onMouseDown={handleItemClicked}>

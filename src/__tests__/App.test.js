@@ -28,6 +28,9 @@ describe("<App /> integration", () => {
     const user = userEvent.setup();
     render(<App />);
 
+    let allEvents = await getEvents();
+    await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
+
     const CitySearch = screen.getByTestId("city-search");
     const CitySearchInput = within(CitySearch).queryByRole("textbox");
 
@@ -39,7 +42,6 @@ describe("<App /> integration", () => {
     const EventList = await screen.findByTestId("event-list");
     const allRenderedEventItems = await within(EventList).findAllByRole("listitem");
 
-    const allEvents = await getEvents();
     const berlinEvents = allEvents.filter(
       (event) => event.location === "Berlin, Germany"
     );

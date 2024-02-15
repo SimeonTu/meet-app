@@ -8,6 +8,7 @@ const feature = loadFeature('./src/features/filterEventsByCity.feature');
 
 defineFeature(feature, test => {
 
+
     test('When user hasn’t searched for a city, show upcoming events from all cities.', ({ given, when, then }) => {
         given('user hasn’t searched for any city', () => {
 
@@ -15,37 +16,45 @@ defineFeature(feature, test => {
 
         when('the user opens the app', () => {
             render(<App />);
+            
         });
 
         then('the user should see the list of all upcoming events.', async () => {
-            render(<App />);
+
+            let allEvents = await getEvents();
+            await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
 
             // const EventList = await screen.findByTestId("event-list")
             const eventListItems = within(await screen.findByTestId("event-list")).queryAllByRole("listitem")
-            console.log(eventListItems.length);
             expect(eventListItems.length).toBe(32)
         });
     });
 
     test('User should see a list of suggestions when they search for a city.', ({ given, when, then }) => {
-        given('the main page is open', () => {
+
+        let citySearch
+
+        given('the main page is open', async () => {
             render(<App />)
+            let allEvents = await getEvents();
+            await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
         });
 
         when('user starts typing in the city textbox', async () => {
 
             const user = userEvent.setup();
             // render(<App />)
-            // const citySearch = screen.getByTestId("city-search")
-            // const cityTextBox = within(citySearch).queryByRole("textbox");
-            const citySearchInput = screen.getAllByRole("textbox")[0] //found more than 1 textboxes (??)
-            await user.type(citySearchInput, "Berlin");
+            citySearch = screen.getAllByTestId("city-search")[0]
+            const cityTextBox = within(citySearch).queryByRole("textbox");
+            // const citySearchInput = screen.getAllByRole("textbox") //found more than 1 textboxes (??)
+
+            await user.type(cityTextBox, "Berlin");
 
         });
 
         then('the user should recieve a list of cities (suggestions) that match what they’ve typed', () => {
 
-            const citySearchList = within(screen.getByTestId("city-search")).queryAllByRole("listitem")
+            const citySearchList = within(citySearch).queryAllByRole("listitem")
             expect(citySearchList).toHaveLength(2)
 
         });
@@ -61,11 +70,15 @@ defineFeature(feature, test => {
 
             const user = userEvent.setup();
             render(<App />)
+
+            let allEvents = await getEvents();
+            await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
+
             citySearchElement = screen.getByTestId("city-search")
             citySearchInput = within(citySearchElement).queryByRole("textbox") //found more than 1 textboxes (??)
-            
-            await user.type(citySearchInput, "Berlin")
 
+            await user.type(citySearchInput, "Berlin")
+            //
         });
 
         and('the list of suggested cities is showing', () => {
@@ -93,7 +106,7 @@ defineFeature(feature, test => {
             const EventList = screen.getByTestId('event-list');
             const EventListItems = within(EventList).queryAllByRole('listitem');
             const allEvents = await getEvents();
-      
+
             // filtering the list of all events down to events located in Germany
             // citySearchInput.value should have the value "Berlin, Germany" at this point
             const berlinEvents = allEvents.filter(event => event.location === citySearchInput.value)

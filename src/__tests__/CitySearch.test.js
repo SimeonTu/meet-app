@@ -19,11 +19,15 @@ describe("<CitySearch /> component", () => {
   });
 
   test("renders a list of suggestions when city textbox gains focus", async () => {
-    render(<CitySearch allLocations={[]} />);
+    render(<App />);
     const user = userEvent.setup();
+
+    let allEvents = await getEvents();
+    await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
+
     const cityTextBox = screen.queryByRole("textbox");
     await user.click(cityTextBox);
-    const suggestionList = screen.queryByRole("list");
+    const suggestionList = screen.queryByTestId("suggestions-container");
     expect(suggestionList).toBeInTheDocument();
     expect(suggestionList).toHaveClass("suggestions");
 
@@ -31,11 +35,15 @@ describe("<CitySearch /> component", () => {
 
   test("updates list of suggestions correctly when user types in city textbox", async () => {
     const user = userEvent.setup();
-    const allEvents = await getEvents();
+    render(<App />);
+
+    let allEvents = await getEvents();
+    await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
     const allLocations = extractLocations(allEvents);
-    render(<CitySearch allLocations={allLocations} setInfoText={() => { }} setErrorText={() => { }} />);
+
 
     // user types "Berlin" in city textbox
+    const citySearch = screen.getByTestId("city-search")
     const cityTextBox = screen.queryByRole("textbox");
     await user.type(cityTextBox, "Berlin");
 
@@ -49,7 +57,8 @@ describe("<CitySearch /> component", () => {
       : [];
 
     // get all <li> elements inside the suggestion list
-    const suggestionListItems = screen.queryAllByRole("listitem");
+    const suggestionListItems = within(citySearch).queryAllByRole("listitem");
+    // console.log(suggestionListItems);
     expect(suggestionListItems).toHaveLength(suggestions.length + 1);
     for (let i = 0; i < suggestions.length; i += 1) {
       expect(suggestionListItems[i].textContent).toBe(suggestions[i]);
@@ -61,7 +70,15 @@ describe("<CitySearch /> component", () => {
     const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
     render(
-      <CitySearch allLocations={allLocations} setCurrentCity={() => { }} setInfoText={() => { }} setErrorText={() => { }} />
+      <CitySearch events={{}}
+        allLocations={[]}
+        setCurrentCity={() => { }}
+        setInfoText={() => { }}
+        setErrorText={() => { }}
+        userCountry={""}
+        userCountryFormatted={[]}
+        searchForUserCountry={""}
+        setSearchForUserCountry={() => { }} />
     );
 
     const cityTextBox = screen.queryByRole("textbox");
@@ -69,6 +86,7 @@ describe("<CitySearch /> component", () => {
 
     // the suggestion's textContent look like this: "Berlin, Germany"
     const BerlinGermanySuggestion = screen.queryAllByRole("listitem")[0];
+    // console.log(BerlinGermanySuggestion);
 
     await user.click(BerlinGermanySuggestion);
 
@@ -80,15 +98,19 @@ describe("<CitySearch /> component", () => {
     const user = userEvent.setup();
     render(<App />)
 
+    let allEvents = await getEvents();
+    await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
+
     const CitySearch = screen.getByTestId("city-search");
     const cityTextBox = within(CitySearch).queryByRole("textbox");
+    // console.log(cityTextBox);
 
     await user.type(cityTextBox, "test{backspace}{backspace}{backspace}{backspace}");
 
-    const allEvents = await getEvents();
     const allLocations = extractLocations(allEvents);
 
     const suggestionListItems = within(CitySearch).queryAllByRole("listitem");
+    // console.log(suggestionListItems);
     expect(suggestionListItems.length).toBe(allLocations.length + 1);
 
   })

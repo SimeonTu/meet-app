@@ -29,6 +29,7 @@ provider:
     CLIENT_ID: ${file(config.json):CLIENT_ID}
     CLIENT_SECRET: ${file(config.json):CLIENT_SECRET}
     CALENDAR_ID: ${file(config.json):CALENDAR_ID}
+    OPENAI_API_KEY: ${file(config.json):OPENAI_API_KEY}
 
 # you can overwrite defaults here
 #  stage: dev
@@ -81,8 +82,15 @@ functions:
     handler: handler.getCalendarEvents
     events:
       - http:
-          path: api/token/{access_token}
+          path: api/get-events/{access_token}
           method: get
+  callChatGPT:
+    handler: handler.callChatGPT
+    events:
+      - http:
+          path: api/gpt
+          method: get
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

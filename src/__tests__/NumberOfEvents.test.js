@@ -1,8 +1,9 @@
 // src/__tests__/NumberOfEvents.test.js
 
-import { render, screen, within, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import NumberOfEvents from "../components/NumberOfEvents";
 import App from "../App";
+import { getEvents } from "../api";
 
 describe("<NumberOfEvents /> component", () => {
   test("contains input field", () => {
@@ -32,13 +33,14 @@ describe("<NumberOfEvents /> integration", () => {
   test("ensure the number of events rendered matches the number of events inputted by the user.", async () => {
 
     render(<App />);
-    const EventList = await screen.findByTestId("event-list");
+    let allEvents = await getEvents();
+    await screen.findAllByText(allEvents[0].summary); //used in order to await for events to load before doing anything
 
     let slider = screen.getByRole("slider")
 
     fireEvent.change(slider, { target: { value: 10 } });
 
-    const allRenderedEventItems = within(EventList).queryAllByRole("listitem");
+    const allRenderedEventItems = screen.queryAllByRole("listitem");
 
     expect(allRenderedEventItems.length).toBe(10)
 

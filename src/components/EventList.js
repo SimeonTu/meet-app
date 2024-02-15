@@ -4,9 +4,10 @@ import { Container, Row } from "react-bootstrap";
 
 const EventList = ({ events }) => {
   return (
-    <Container className="mx-auto p-0" data-testid="event-list" role="list">
+    <Container className="mx-auto p-0" >
       <Row
-        role="listitem"
+        data-testid="event-list"
+        role="list"
         className="event"
       >
         {events
