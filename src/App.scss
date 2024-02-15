@@ -1,13 +1,13 @@
-:root {
-  --bluegreen: #bcdcdb;
-}
+$bluegreen: #bcdcdb;
+$bg-color: #d2efee;
+
 
 $primary: #EFD2D3;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 body {
-  background-color: #d2efee;
+  background-color: $bg-color;
 }
 
 .App-logo {
@@ -233,6 +233,32 @@ input[type="number"] {
 
 }
 
+.charts-container {
+  background-color: rgb(252, 248, 248);
+  border-radius: 7px;
+  box-shadow: 0px 0px 20px -10px rgba(0, 0, 0, 0.75);
+
+  .event-genres-chart {
+    width: 99%;
+  }
+
+  .recharts-default-legend {
+    background-color: darken(rgb(239, 210, 211), 2%);
+    padding: 4px !important;
+    border-radius: 7px;
+
+    .recharts-legend-item {
+      font-weight: bold;
+      text-shadow: 1px 1px 2px black;
+
+      .recharts-surface {
+        filter: drop-shadow(1px 1px 2px rgb(56, 49, 55));
+      }
+
+    }
+  }
+
+}
 
 
 @include media-breakpoint-up(sm) {
@@ -248,10 +274,16 @@ input[type="number"] {
     // padding: px 20px 15px 20px;
   }
 
+
+
 }
 
 @include media-breakpoint-up(md) {
 
+
+  .event-genres-chart {
+    width: 30%;
+  }
   #top-bar {
     display: flex;
     justify-content: center;

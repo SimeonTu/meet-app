@@ -21,7 +21,7 @@ const EventGenresChart = ({ events }) => {
                 fill={colors[index]}
                 textAnchor={x > cx ? 'start' : 'end'}
                 dominantBaseline="central"
-                style={{ fontSize: "1.15rem", fontWeight: "bold", textShadow: "1px 1px 3px rgb(56, 49, 55)", padding: "5px" }}
+                style={{ fontSize: "1.15rem", fontWeight: "bold", textShadow: "1px 1px 2px rgb(56, 49, 55)", padding: "5px" }}
             >
                 {`${genres[index]} ${(percent * 100).toFixed(0)}%`}
             </text>
@@ -42,8 +42,8 @@ const EventGenresChart = ({ events }) => {
     }, [getData]);
 
     return (
-        <ResponsiveContainer width="99%" height={400}>
-            <div style={{ width: '100%', height: 300 }}>
+        <ResponsiveContainer className="event-genres-chart" width={window.innerWidth > 768 ? "80%" : "99%"} height={400}>
+            <div style={{ width: '100%', height: 400 }}>
                 <ResponsiveContainer>
                     <PieChart>
                         <Pie
@@ -59,8 +59,8 @@ const EventGenresChart = ({ events }) => {
                                     <Cell key={`cell-${index}`} fill={colors[index]} />
                                 ))
                             }
-                            <Legend verticalAlign="top" height={36} />
                         </Pie>
+                        <Legend verticalAlign="bottom" />
                     </PieChart>
                 </ResponsiveContainer>
             </div>

@@ -77,10 +77,10 @@ function App() {
 
   const fetchEvents = useCallback(async () => {
 
-    // console.log("inside fetchEvents...");
-    // console.log("value of showloginscreen:", showLoginScreen);
-    // console.log("value of token:", token);
-    // console.log("value of events:", events);
+    console.log("inside fetchEvents...");
+    console.log("value of showloginscreen:", showLoginScreen);
+    console.log("value of token:", token);
+    console.log("value of events:", events);
 
     // check to see if the user has an access token
     if (!window.location.href.startsWith("http://localhost") && !token) {
@@ -101,9 +101,7 @@ function App() {
     }
 
     if (!showLoginScreen && token && !events) {
-      // console.log("getting events...");
-
-      if (!loading) setLoading(true)
+      console.log("getting events...");
 
       const allEvents = await getEvents(token);
       const allLocations = extractLocations(allEvents);
@@ -111,11 +109,9 @@ function App() {
       setAllEvents(allEvents)
       setLocations(allLocations)
 
-      // console.log(events);
+      console.log(events);
 
       setEventValues();
-
-      setLoading(false)
 
     }
 
@@ -172,6 +168,7 @@ function App() {
 
   useEffect(() => {
 
+    console.log("loading:", loading);
     // console.log("online:", navigator.onLine);
     if (navigator.onLine) {
       setOfflineText("")
@@ -184,10 +181,12 @@ function App() {
     }
 
     if (!events) {
+      setLoading(true)
       fetchEvents();
     }
     if (events) {
       setEventValues();
+      setLoading(false)
       console.log(events);
     }
 
@@ -273,21 +272,21 @@ function App() {
               </div>
             </div>
 
-            <button
-              onClick={() => showCharts ? setShowCharts(false) : setShowCharts(true)}
-              className="alerts-button p-2 mt-3 mb-3">{showCharts ? "Hide Charts" : "Show charts"}
-            </button>
-
             {
               loading ? (
                 <EventPlaceholder amount={3} />
               ) : !loading && events.length ? (
                 <>
+                  <button
+                    onClick={() => showCharts ? setShowCharts(false) : setShowCharts(true)}
+                    className="alerts-button p-2 mt-3 mb-3">{showCharts ? "Hide Charts" : "Show charts"}
+                  </button>
+
                   <AnimateHeight
                     duration={500}
                     height={showCharts ? "auto" : 0}
                   >
-                    <div className="d-md-flex mx-lg-5 charts-container">
+                    <div className="d-md-flex p-xs-0 p-md-3 mb-2 mx-lg-5 charts-container">
                       <EventGenresChart events={events} />
                       <CityEventsChart locations={locations} events={events} />
                     </div>
