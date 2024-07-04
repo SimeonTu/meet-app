@@ -4,9 +4,20 @@ The primary goal of this project is to provide users with a seamless experience 
 
 PWA's features contribute to instant loading, offline support, and cross-platform compatibility and leveraging serverless architecture ensures scalability, availability, and cost-effectiveness. For the app, serverless functions hosted on the cloud provider AWS Lambda are employed to interact with the Google Calendar API and fetch upcoming events.
 
-![Screenshot of the website](https://simeontu.github.io/portfolio-website-simeon/img/portfolio3_old.png)
+![Screenshot of the website](https://github.com/SimeonTu/portfolio-website-simeon/blob/main/img/dev-events-fig-1.gif)
 
 [Link to live site](https://simeontu.github.io/meet-app/)
+
+# Technologies used
+-	React
+-	HTML / JSX
+-	CSS / SCSS
+-	PWA for offline support and native-like installation
+-	AWS Lambda for Google OAuth
+-	Google Calendar API / Open AI API
+-	Jest-Cucumber / RTL / Puppeteer for testing
+-	Recharts 
+-	React Bootstrap / NProgress for styling
 
 # Features, user stories and scenarios
 ## 1. Filter Events by City.
